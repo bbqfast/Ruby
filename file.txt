@@ -1,0 +1,10 @@
+
+
+
+puts 'start'
+File.open("filename", "mode") do |aFile|
+    while (line = infile.gets)
+        puts "#{counter}: #{line}"
+        counter = counter + 1
+    end# ... process the file
+end
