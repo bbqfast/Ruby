@@ -5,6 +5,7 @@ function Node(ch, wordEnd)
     this.m_center = null;
     this.m_right = null;
     this.m_wordEnd = wordEnd;
+    m_score = 0;
     //internal Node m_left, m_center, m_right;
     //internal bool m_wordEnd;
 }
@@ -12,17 +13,17 @@ function Node(ch, wordEnd)
 function dict(r)
 {
     this.m_root = r;
-    this.Add = function(s, root)
+    this.Add = function(s, score, root)
     {
         if (s == null || s == "")
         {
             throw 'xxx';
         }
     
-        this.Add_r(s, 0, root);
+        this.Add_r(s, score, 0, root);
     }
     
-    this.Add_r = function(s, pos, node)
+    this.Add_r = function(s, score, pos, node)
     {
         if (node[0] == null)
         {
@@ -34,7 +35,7 @@ function dict(r)
             //w('less');
             var nodewrap = [];
             nodewrap[0] = node[0].m_left;
-            this.Add_r(s, pos, nodewrap);
+            this.Add_r(s, score, pos, nodewrap);
             node[0].m_left = nodewrap[0];
         }
         else if (s[pos] > node[0].m_char)
@@ -42,18 +43,18 @@ function dict(r)
             // w('greate');
             var nodewrap = [];
             nodewrap[0] = node[0].m_right;
-            this.Add_r(s, pos, nodewrap);
+            this.Add_r(s, score, pos, nodewrap);
             node[0].m_right = nodewrap[0];
         }
         else
         {
-            if (pos + 1 == s.length) { node[0].m_wordEnd = true; }
+            if (pos + 1 == s.length) { node[0].m_wordEnd = true; node[0].m_score = score}
             else
             {
-                // w('center')
+                 // w('center=' + s[pos]);
                 var nodewrap = [];
                 nodewrap[0] = node[0].m_center;
-                this.Add_r(s, pos + 1, nodewrap);
+                this.Add_r(s, score, pos + 1, nodewrap);
                 node[0].m_center = nodewrap[0];
             }
         }
@@ -70,6 +71,7 @@ function dict(r)
         var lastnode = node;
         while (node != null)
         {
+            w('prefix on =' + s[pos]);
             // w('char=' + node.m_char)
             var cmp = s[pos] - node.m_char;
             lastnode = node;
@@ -79,13 +81,16 @@ function dict(r)
             {
                 if (++pos == s.length)
                 {
-                    return node;
+                    w('end = ' + node.m_char);
+                    return node.m_center;
                 }
+                w('down = ' + node.m_char);
                 node = node.m_center;
             }
         }
     
-        return lastnode;
+        // w('lastnode=' + lastnode.m_char);
+        return node;
     }
     
     this.fillNode_i=  function(root, file)
@@ -116,7 +121,8 @@ function dict(r)
     {
         var prenode = this.prefix(s, root);
         // w(prenode);
-        s = s.substring(0, s.length - 1);
+        // s = s.substring(0, s.length - 1);
+        w('this.list='+ s);
         this.list(prenode, s);
     }
     
@@ -128,7 +134,7 @@ function dict(r)
         }
         if (n.m_wordEnd)
         {
-            w(str + n.m_char);
+            w(str + n.m_char + ' ' + n.m_score);
         }
         
         this.list(n.m_left, str );
@@ -137,9 +143,9 @@ function dict(r)
     }    
 } // constructor
 
-dict.prototype.Addword = function(s)
+dict.prototype.Addword = function(s, score)
 {
-    this.Add(s, this.m_root);
+    this.Add(s, score, this.m_root);
 }
 
 dict.prototype.list_match = function(s)
@@ -164,10 +170,10 @@ function dump(n, spc)
     {
         return;
     }
-    dump(n.m_left, spc + ' L');
+    dump(n.m_left, spc + ' ');
     dump(n.m_center, spc + ' ');
     w(spc + n.m_char);
-    dump(n.m_right, spc + ' R');
+    dump(n.m_right, spc + ' ');
 }
     
 function Contains(s, root)
@@ -259,27 +265,43 @@ function test()
     var mydict = new dict(myroot);
     //w(mydict);
     // w(xx.length);
-    mydict.Addword("car");
-    mydict.Addword("carbon");
-    mydict.Addword("care");
-    mydict.Addword("cartoon");
-    mydict.Addword("cactus");
+    mydict.Addword("good");
+    mydict.Addword("goody");
+    mydict.Addword("goof");
+    mydict.Addword("god");
+    mydict.Addword("golf");
     // Add("technology");
     // w(Contains("car"));
     // w(Contains("carbon"));
     // var prenode = prefix("car", m_root);
     // w(prenode);
-     //dump(m_root[0]);
+     dump(myroot[0]);
+     w('Contains = ' +Contains('goolf', myroot[0]));
      // list(prenode, '');
-    mydict.list_match("car");
+    mydict.list_match("goo");
 }
 
-// f();
-var myroot = [];
-var mydict = new dict(myroot);
+function dictcount()
+{
+    var myroot = [];
+    var mydict = new dict(myroot);
+        
+    var dd = require('./thedict.js');
+    for(var x in dd.dictdata) {
+      // w( x + " : " + dd.dictdata[x] );
+      mydict.Addword(x, dd.dictdata[x]);
+    }
+    
+    mydict.list_match("too");
 
+}
+
+// test();
+ dictcount();
 // fillNode('3esl-a.txt');
-addcount('3esl-a.txt');
+// addcount('3esl-a.txt');
+
+
 
 // Add("carbon", m_root);
 // w(m_root[0]);
@@ -287,3 +309,10 @@ addcount('3esl-a.txt');
 //list_match("app", m_root);
 
 // test();
+
+
+
+
+
+
+

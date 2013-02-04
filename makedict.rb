@@ -13,6 +13,20 @@ def read_to_hash(fname, dict)
   end
 end
 
+def write_from_hash_js(fname, dict)
+  File.open(fname, "w") do |out|
+    out.puts 'var dictdata={'
+    dict.each_key do |x|
+      if (x.include? "'")
+        next
+      end
+      out.puts "\"#{x}\" : \"#{dict[x].to_s}\","
+    end
+    out.puts '};'
+    out.puts "module.exports.dictdata = dictdata;";
+  end
+end
+
 def write_from_hash(fname, dict)
   File.open(fname, "w") do |out|
     dict.each_key do |x|
@@ -70,15 +84,16 @@ def get_output_name(fn)
 end
  
 dict = {}
-fn = 'orig.txt'
+fn = 'orig-1.txt'
 read_to_hash(fn, dict)
-pof_read_words('tjautumn12.txt', dict)
-#puts list
-#printSortedHash dict
+bookfile = '5 - Apollyon.txt'
+#pof_read_words(bookfile, dict)
 
-newfn = get_output_name(fn)
+#newfn = get_output_name(fn)
+#newfn = fn
+newfn = 'thedict.js'; 
 puts 'new file=' + newfn
-write_from_hash(newfn, dict)
+write_from_hash_js(newfn, dict)
 printSortedHash(dict)
 
 
