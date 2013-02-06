@@ -287,9 +287,10 @@ function dictcount()
     var mydict = new dict(myroot);
         
     var dd = require('./thedict.js');
-    for(var x in dd.dictdata) {
-      // w( x + " : " + dd.dictdata[x] );
-      mydict.Addword(x, dd.dictdata[x]);
+    for(var i=0;i< dd.dictdata.length;i++) {
+      var x=dd.dictdata[i];
+      w( x[0] + " : " + x[1] );
+      mydict.Addword(x[0], x[1]);
     }
     
     mydict.list_match("too");

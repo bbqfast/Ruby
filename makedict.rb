@@ -15,14 +15,15 @@ end
 
 def write_from_hash_js(fname, dict)
   File.open(fname, "w") do |out|
-    out.puts 'var dictdata={'
+    out.puts 'var dictdata=['
     dict.each_key do |x|
       if (x.include? "'")
         next
       end
-      out.puts "\"#{x}\" : \"#{dict[x].to_s}\","
+      # out.puts "\"#{x}\" : \"#{dict[x].to_s}\","
+      out.puts "[\"#{x}\" , \"#{dict[x].to_s}\"],"
     end
-    out.puts '};'
+    out.puts '];'
     out.puts "module.exports.dictdata = dictdata;";
   end
 end
