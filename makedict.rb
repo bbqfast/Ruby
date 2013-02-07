@@ -85,10 +85,17 @@ def get_output_name(fn)
 end
  
 dict = {}
-fn = 'orig-1.txt'
+#fn = 'orig-1.txt'
+fn = '6of12.txt'
 read_to_hash(fn, dict)
-bookfile = '5 - Apollyon.txt'
-#pof_read_words(bookfile, dict)
+#bookfile = '5 - Apollyon.txt'
+pof_read_words('tjautumn12.txt', dict)
+pof_read_words('1 - Left Behind.txt', dict)
+pof_read_words('3 - Nicolae.txt', dict)
+pof_read_words('2 - Tribulation Force.txt', dict)
+pof_read_words('4 - Soul Harvest.txt', dict)
+#pof_read_words('', dict)
+
 
 #newfn = get_output_name(fn)
 #newfn = fn
