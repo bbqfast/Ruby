@@ -7,7 +7,9 @@ def read_to_hash(fname, dict)
   File.open(fname, "r:utf-8") do |f|
     while(line = f.gets)
       item = line.split(' ')
-      dict[item[0]] = item[1].to_i
+      word=item[0].downcase
+      word = word.gsub(/[^a-zA-Z]/,'')
+      dict[word] = item[1].to_i
       #puts item.to_s
     end
   end
