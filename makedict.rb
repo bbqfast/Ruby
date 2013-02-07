@@ -88,7 +88,8 @@ end
  
 dict = {}
 #fn = 'orig-1.txt'
-fn = '6of12.txt'
+#fn = '6of12.txt'
+fn='5desk.txt'
 read_to_hash(fn, dict)
 #bookfile = '5 - Apollyon.txt'
 pof_read_words('tjautumn12.txt', dict)
@@ -101,7 +102,7 @@ pof_read_words('4 - Soul Harvest.txt', dict)
 
 #newfn = get_output_name(fn)
 #newfn = fn
-newfn = 'thedict.js'; 
+newfn = 'thedictl.js'; 
 puts 'new file=' + newfn
 write_from_hash_js(newfn, dict)
 printSortedHash(dict)
